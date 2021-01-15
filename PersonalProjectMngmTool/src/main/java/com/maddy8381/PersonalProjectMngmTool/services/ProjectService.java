@@ -3,6 +3,7 @@ package com.maddy8381.PersonalProjectMngmTool.services;
 import com.maddy8381.PersonalProjectMngmTool.domain.Project;
 import com.maddy8381.PersonalProjectMngmTool.exceptions.ProjectIdException;
 import com.maddy8381.PersonalProjectMngmTool.repositories.ProjectRepository;
+import jdk.nashorn.internal.ir.PropertyKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,16 @@ public class ProjectService {
 
     public Iterable<Project> findAllProjects(){
         return projectRepository.findAll();
+    }
+
+    public void deleteProjectByIdentifier(String projectId){
+        Project project = projectRepository.findByProjectIdentifier(projectId);
+
+        if(project == null){
+            throw new ProjectIdException("Cannot delete Project with " + projectId + ". This Project does not exist");
+        }
+
+        projectRepository.delete(project); //No need to add in repository
     }
 }
 
