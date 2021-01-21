@@ -12,6 +12,7 @@ class Dashboard extends Component {
   }
 
   render() {
+    const {projects} = this.props.project
     return (
      <React.Fragment>
         <div className="projects">
@@ -23,8 +24,12 @@ class Dashboard extends Component {
                         <CreateProjectButton />
                         <br />
                         <hr />
+                        {projects.map(project=>( //Passing One by one object from List as a prop to ProjectItem Component
 
-                        <ProjectItem />
+                          <ProjectItem key={project.id} project={project} />
+                        ))
+
+                        }
                     </div>
                 </div>
             </div>
