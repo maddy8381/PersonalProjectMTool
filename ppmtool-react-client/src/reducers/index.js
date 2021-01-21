@@ -1,7 +1,9 @@
 //This is the Root Reducer
 import {combineReducers} from "redux"
 import errorReducer from "./errorReducer";
+import projectReducer from "./projectReducer";
 
 export default combineReducers({
-    errors: errorReducer
+    errors: errorReducer,
+    project: projectReducer
 });
