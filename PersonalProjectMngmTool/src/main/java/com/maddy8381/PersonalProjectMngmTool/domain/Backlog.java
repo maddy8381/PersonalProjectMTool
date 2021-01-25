@@ -3,6 +3,8 @@ package com.maddy8381.PersonalProjectMngmTool.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Backlog {
@@ -20,6 +22,11 @@ public class Backlog {
     private Project project; //project name must be same as mappedBy attribute set in the ProjectCLass of Backlog object
 
     //OneToMany with Project Task
+    //Backlog will have many project task but a project task can only have one backlog
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //When we del backlog, all the task related with backlog will get deleted
+    private List<ProjectTask> projectTasks = new ArrayList<>();
+
+
 
     public Backlog() {
     }
@@ -54,5 +61,13 @@ public class Backlog {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public List<ProjectTask> getProjectTasks() {
+        return projectTasks;
+    }
+
+    public void setProjectTasks(List<ProjectTask> projectTasks) {
+        this.projectTasks = projectTasks;
     }
 }
