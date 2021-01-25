@@ -23,7 +23,7 @@ public class Backlog {
 
     //OneToMany with Project Task
     //Backlog will have many project task but a project task can only have one backlog
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //When we del backlog, all the task related with backlog will get deleted
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER , mappedBy = "backlog") //When we del backlog, all the task related with backlog will get deleted
     private List<ProjectTask> projectTasks = new ArrayList<>();
 
 
