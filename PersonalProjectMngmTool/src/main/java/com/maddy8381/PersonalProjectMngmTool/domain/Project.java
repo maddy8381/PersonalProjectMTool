@@ -35,6 +35,13 @@ public class Project {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
+    //Project has only 1 backlog, when we load project obj then backlog info is readily available,
+    // project is the owning side of relationship-tht means if I delete Project then everything thts child to the project like
+    //Backlog and ProjectTask should be deleted
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    //
+    private Backlog backlog;
+
     //Default Constructor
     public Project() {
     }
@@ -101,6 +108,14 @@ public class Project {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     //Important
