@@ -1,6 +1,7 @@
 package com.maddy8381.PersonalProjectMngmTool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -39,7 +40,7 @@ public class Project {
     // project is the owning side of relationship-tht means if I delete Project then everything thts child to the project like
     //Backlog and ProjectTask should be deleted
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
-    //
+    @JsonIgnore //Decoupling Backlog from Project so that whenever we need Project Only - Backlog will not come with it - Response Size will decrease by this
     private Backlog backlog;
 
     //Default Constructor
