@@ -41,7 +41,7 @@ public class ProjectTaskService {
             projectTask.setProjectIdentifier(projectIdentifier);
 
             //Initial Priority when priority is null
-            if( projectTask.getPriority() == null) //TODO projectTask.getPriority() == 0 ||
+            if(projectTask.getPriority() == 0 || projectTask.getPriority() == null)
                 projectTask.setPriority(3); //Low Priority
 
             //Initial Status when status is null
