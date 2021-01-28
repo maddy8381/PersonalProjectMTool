@@ -23,7 +23,7 @@ public class ProjectTask {
     private Date dueDate;
     //ManyToOne Backlog - Each task can have only one backlog
     //Refresh - we can delete proj task and it will refreshes the backlog & tells u know what this no longer exists.
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @ManyToOne(fetch = FetchType.EAGER) //Removing Refresh bcoz projectTask was not getting deleted
     @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
     @JsonIgnore //Prevents Recurssion
     private Backlog backlog;
