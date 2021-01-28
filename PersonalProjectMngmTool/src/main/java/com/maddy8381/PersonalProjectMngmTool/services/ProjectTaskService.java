@@ -90,7 +90,7 @@ public class ProjectTaskService {
     public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_id){
 
         //Find existing project task
-        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(pt_id);
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_id); //this has validation already
         //Replace it with updated task
         projectTask = updatedTask;
 
@@ -99,5 +99,8 @@ public class ProjectTaskService {
     }
 
 
-
+    public void deletePTByProjectSequence(String backlog_id, String pt_id){
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_id);
+        projectTaskRepository.delete(projectTask);
+    }
 }
