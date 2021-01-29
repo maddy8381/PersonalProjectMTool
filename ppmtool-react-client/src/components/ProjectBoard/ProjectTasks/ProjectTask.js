@@ -1,26 +1,27 @@
 import React, { Component } from 'react'
+import { Link } from "react-router-dom";
 
- class ProjectTask extends Component {
+class ProjectTask extends Component {
     render() {
         const { project_task } = this.props;
         let priorityString;
         let priorityClass;
 
-        if(project_task.priority === 1){
+        if (project_task.priority === 1) {
             priorityClass = "bg-danger text-light"
             priorityString = "HIGH"
-        }else if(project_task.priority === 2){
+        } else if (project_task.priority === 2) {
             priorityClass = "bg-warning text-light"
             priorityString = "MEDIUM"
-        }else{
-                priorityClass = "bg-info text-light"
-                priorityString = "LOW"
+        } else {
+            priorityClass = "bg-info text-light"
+            priorityString = "LOW"
         }
 
 
 
         return (
-                                    
+
             <div className="card mb-1 bg-light">
                 <div className={`card-header text-primary text-light ${priorityClass}}`}>
                     ID: {project_task.projectSequence} -- Priority: {priorityString}
@@ -30,9 +31,9 @@ import React, { Component } from 'react'
                     <p className="card-text text-truncate ">
                         {project_task.acceptanceCriteria}
                     </p>
-                    <a href="#" className="btn btn-primary">
+                    <Link to={`/updateProjectTask/${project_task.projectIdentifier}/${project_task.projectSequence}`} className="btn btn-primary">
                         View / Update
-                    </a>
+                    </Link>
 
                     <button className="btn btn-danger ml-4">
                         Delete
