@@ -5,7 +5,7 @@ const initialState = {
     project_task: {}
 }
 
-export default function AnyFun(state = initialState, action) {
+export default function AnyFunName(state = initialState, action) {
 
     switch (action.type) {
 
