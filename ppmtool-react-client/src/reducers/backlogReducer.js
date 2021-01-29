@@ -5,28 +5,29 @@ const initialState = {
     project_task: {}
 }
 
-export default function AnyFun(state=initialState, action){
+export default function AnyFun(state = initialState, action) {
 
-    switch(action.type){
+    switch (action.type) {
 
         case GET_BACKLOG:
-            return{
+            return {
                 ...state,
                 project_tasks: action.payload
-            }
+            };
 
         case GET_PROJECT_TASK:
-            return{
+            return {
                 ...state,
                 project_task: action.payload
-            }
-        
+            };
+
         case DELETE_PROJECT_TASK:
-            return{
-                ...state
-                //TODO
-            }    
-        default: 
+            return {
+                ...state,
+                project_tasks: state.project_tasks.filter(project_task => project_task.projectSequence !== action.payload)
+            };
+
+        default:
             return state;
     }
 }
