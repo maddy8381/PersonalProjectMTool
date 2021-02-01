@@ -13,6 +13,28 @@ import UpdateProjectTask from './components/ProjectBoard/ProjectTasks/UpdateProj
 import Landing from './components/Layout/Landing';
 import Register from './components/UserManagement/Register';
 import Login from './components/UserManagement/Login';
+import jwt_decode from "jwt-decode";
+import setJWTToken from "./securityUtils/setJWTToken";
+import { SET_CURRENT_USER } from './actions/types';
+
+const jwtToken = localStorage.jwtToken;
+
+//If we refresh page the token goes away - to prevent this we are extracting token from localStorage and setting token
+//everytime we update/go because of all of the routes 
+if (jwtToken) {
+  setJWTToken(jwtToken);
+  const decoded_jwtToken = jwt_decode(jwtToken);
+  store.dispatch({ //dispatch this back onto our state
+    type: SET_CURRENT_USER,
+    payload: decoded_jwtToken
+  });
+
+  const currentTime = Date.now() / 1000;
+  if (decoded_jwtToken.exp < currentTime) { // it is expired
+    //Handle Logout
+    // window.location.href = "/";
+  }
+}
 
 function App() {
   return (
