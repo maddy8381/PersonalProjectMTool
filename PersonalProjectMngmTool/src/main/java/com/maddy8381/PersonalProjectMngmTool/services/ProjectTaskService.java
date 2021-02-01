@@ -22,12 +22,13 @@ public class ProjectTaskService {
     @Autowired
     private ProjectRepository projectRepository;
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask){
-        //Exceptions: Project Not Found
+    @Autowired
+    private ProjectService projectService;
 
-        try{
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String username){
+
             //ProjectTasks to be added to a specific project, project != null, Backlog exists
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+            Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog(); //backlogRepository.findByProjectIdentifier(projectIdentifier);
             //Set the backlog to the ProjectTask
             projectTask.setBacklog(backlog);
 
@@ -41,7 +42,7 @@ public class ProjectTaskService {
             projectTask.setProjectIdentifier(projectIdentifier);
 
             //Initial Priority when priority is null
-            if(projectTask.getPriority() == 0 || projectTask.getPriority() == null)
+            if(projectTask.getPriority() == null || projectTask.getPriority() == 0 )
                 projectTask.setPriority(3); //Low Priority
 
             //Initial Status when status is null
@@ -49,19 +50,12 @@ public class ProjectTaskService {
                 projectTask.setStatus("TO_DO");
 
             return projectTaskRepository.save(projectTask);
-        }catch (Exception e){
-            throw new ProjectNotFoundException("Project Not Found");
-        }
-
 
     }
 
-    public Iterable<ProjectTask> findBacklogById(String id){
-        Project project = projectRepository.findByProjectIdentifier(id);
-        //Removing case where project does not exist and still we are providing empty array
-        if(project == null){
-            throw new ProjectNotFoundException("Project With Id: " + id + " does not exist");
-        }
+    public Iterable<ProjectTask> findBacklogById(String id, String username){
+
+        projectService.findProjectByIdentifier(id, username); //Checking user is allowed to actually work with this project
 
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
