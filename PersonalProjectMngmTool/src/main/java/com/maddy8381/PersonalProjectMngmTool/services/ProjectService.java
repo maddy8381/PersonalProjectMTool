@@ -4,6 +4,7 @@ import com.maddy8381.PersonalProjectMngmTool.domain.Backlog;
 import com.maddy8381.PersonalProjectMngmTool.domain.Project;
 import com.maddy8381.PersonalProjectMngmTool.domain.User;
 import com.maddy8381.PersonalProjectMngmTool.exceptions.ProjectIdException;
+import com.maddy8381.PersonalProjectMngmTool.exceptions.ProjectNotFoundException;
 import com.maddy8381.PersonalProjectMngmTool.repositories.BacklogRepository;
 import com.maddy8381.PersonalProjectMngmTool.repositories.ProjectRepository;
 import com.maddy8381.PersonalProjectMngmTool.repositories.UserRepository;
@@ -49,27 +50,28 @@ public class ProjectService {
         }
     }
 
-    public Project findProjectByIdentifier(String projectId){
+    public Project findProjectByIdentifier(String projectId, String username){
 
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
         if(project == null){
             throw new ProjectIdException("Project Id does not exist");
         }
+
+        //If he is not the user who created tht project
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project Not Found in your account");
+        }
+
         return project;
     }
 
-    public Iterable<Project> findAllProjects(){
-        return projectRepository.findAll();
+    public Iterable<Project> findAllProjects(String username){
+        return projectRepository.findAllByProjectLeader(username);
     }
 
-    public void deleteProjectByIdentifier(String projectId){
-        Project project = projectRepository.findByProjectIdentifier(projectId);
+    public void deleteProjectByIdentifier(String projectId, String username){
 
-        if(project == null){
-            throw new ProjectIdException("Cannot delete Project with " + projectId + ". This Project does not exist");
-        }
-
-        projectRepository.delete(project); //No need to add in repository
+        projectRepository.delete(findProjectByIdentifier(projectId, username)); //No need to add in repository
     }
 }
 
