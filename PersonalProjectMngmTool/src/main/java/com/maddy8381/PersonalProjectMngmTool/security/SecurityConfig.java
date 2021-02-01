@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.maddy8381.PersonalProjectMngmTool.security.SecurityConstants.H2_URL;
 import static com.maddy8381.PersonalProjectMngmTool.security.SecurityConstants.SIGN_UP_URLS;
@@ -31,6 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { //WebSecurity
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+        return new JwtAuthenticationFilter();
+    }
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -61,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { //WebSecurity
                         "/",
                         "/favicon.ico",
                         "/**/*.png",
-                        "/**/*.jif",
+                        "/**/*.gif",
                         "/**/*.svg",
                         "/**/*.jpg",
                         "/**/*.html",
@@ -71,6 +77,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { //WebSecurity
                 .antMatchers(SIGN_UP_URLS).permitAll()
                 .antMatchers(H2_URL).permitAll()
                 .anyRequest().authenticated(); //Any Request other than those need to be authenticated
-
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
