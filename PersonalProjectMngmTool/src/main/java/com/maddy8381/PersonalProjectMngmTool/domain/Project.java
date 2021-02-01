@@ -43,6 +43,12 @@ public class Project {
     @JsonIgnore //Decoupling Backlog from Project so that whenever we need Project Only - Backlog will not come with it - Response Size will decrease by this
     private Backlog backlog;
 
+    @ManyToOne(fetch = FetchType.LAZY) //Lazy: bcoz we dont need to load user info when we del the project
+    @JsonIgnore //To remove infinite recurs problem
+    private User user;
+
+    private String projectLeader;
+
     //Default Constructor
     public Project() {
     }
@@ -117,6 +123,22 @@ public class Project {
 
     public void setBacklog(Backlog backlog) {
         this.backlog = backlog;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getProjectLeader() {
+        return projectLeader;
+    }
+
+    public void setProjectLeader(String projectLeader) {
+        this.projectLeader = projectLeader;
     }
 
     //Important
