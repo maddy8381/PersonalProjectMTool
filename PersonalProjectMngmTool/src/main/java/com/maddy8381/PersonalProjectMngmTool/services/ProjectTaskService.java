@@ -60,13 +60,10 @@ public class ProjectTaskService {
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
-    public ProjectTask findProjectTaskByProjectSequence(String backlog_id, String pt_id){
+    public ProjectTask findProjectTaskByProjectSequence(String backlog_id, String pt_id, String username){
 
-        //Make sure we are searching on the existing backlog
-        Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
-        if(backlog == null){
-            throw new ProjectNotFoundException("Project With Id: " + backlog_id + " does not exist");
-        }
+        projectService.findProjectByIdentifier(backlog_id, username); //Checking user is allowed to actually work with this project
+
         //make sure that our task exists
         ProjectTask projectTask = projectTaskRepository.findByProjectSequence(pt_id);
         if(projectTask == null){
@@ -81,10 +78,10 @@ public class ProjectTaskService {
     }
 
     //Update Project Task
-    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_id){
+    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_id, String username){
 
         //Find existing project task
-        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_id); //this has validation already
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_id, username); //this has validation already
         //Replace it with updated task
         projectTask = updatedTask;
 
@@ -93,8 +90,8 @@ public class ProjectTaskService {
     }
 
 
-    public void deletePTByProjectSequence(String backlog_id, String pt_id){
-        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_id);
+    public void deletePTByProjectSequence(String backlog_id, String pt_id, String username){
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_id, username);
 
         projectTaskRepository.delete(projectTask);
     }
