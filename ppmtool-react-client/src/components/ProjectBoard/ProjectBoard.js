@@ -5,24 +5,24 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getBacklog } from '../../actions/backlogActions';
 
- class ProjectBoard extends Component {
-    
+class ProjectBoard extends Component {
+
     //Constructor to handle errors
-    constructor(){
+    constructor() {
         super();
 
         this.state = {
             errors: {}
         };
     }
-    
-    componentDidMount(){
-        const {id} = this.props.match.params; //extracting Id from URL
+
+    componentDidMount() {
+        const { id } = this.props.match.params; //extracting Id from URL
         this.props.getBacklog(id);
     }
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps.errors){
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
             this.setState({
                 errors: nextProps.errors
             });
@@ -30,29 +30,35 @@ import { getBacklog } from '../../actions/backlogActions';
     }
 
     render() {
-        const {id} = this.props.match.params;
+        const { id } = this.props.match.params;
         const { project_tasks } = this.props.backlog;
         const { errors } = this.state;
 
         let BoardContent;
 
         const boardAlgorithm = (errors, project_tasks) => {
-            if(project_tasks.length < 1){ //Empty
-                if(errors.projectNotFound){
-                    return(
+            if (project_tasks.length < 1) { //Empty
+                if (errors.projectNotFound) {
+                    return (
                         <div className="alert alert-danger text-center" role="alert">
                             {errors.projectNotFound}
                         </div>
                     );
-                }else{
-                    return(
+                } else if (errors.projectIdentifier) {
+                    return (
+                        <div className="alert alert-danger text-center" role="alert">
+                            {errors.projectIdentifier}
+                        </div>
+                    );
+                } else {
+                    return (
                         <div className="alert alert-info text-center" role="alert">
                             No Project Tasks on this board
                         </div>
                     );
                 }
-            }else{
-                return <Backlog project_tasks_prop= {project_tasks}/>;
+            } else {
+                return <Backlog project_tasks_prop={project_tasks} />;
             }
         };
 
@@ -77,9 +83,9 @@ ProjectBoard.propTypes = {
     errors: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state =>({
+const mapStateToProps = state => ({
     backlog: state.backlog,
     errors: state.errors
 });
 
-export default connect(mapStateToProps, {getBacklog})(ProjectBoard); //connecting ProjectBoard to store
+export default connect(mapStateToProps, { getBacklog })(ProjectBoard); //connecting ProjectBoard to store
