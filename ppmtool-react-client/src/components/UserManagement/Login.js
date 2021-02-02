@@ -35,6 +35,13 @@ class Login extends Component {
         this.props.login(LoginRequest);
     }
 
+    componentDidMount() {
+        //If user is already logged in redirect him to dasbhard
+        if (this.props.security.validToken) {
+            this.props.history.push("/dashboard");
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.security.validToken) {
             this.props.history.push("/dashboard");
